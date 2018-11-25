@@ -266,12 +266,26 @@
             [webView loadRequest:navigationAction.request];
         }
     }
-    decisionHandler(WKNavigationActionPolicyAllow);
+    if ([self.delegate respondsToSelector:@selector(webView:decidePolicyForNavigationAction:decisionHandler:)]) {
+        [self.delegate webView:webView decidePolicyForNavigationAction:navigationAction decisionHandler:decisionHandler];
+    } else {
+        decisionHandler(WKNavigationActionPolicyAllow);
+    }
 }
 
--(void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
     [self.webView.scrollView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO]; //otherwise top of website is sometimes hidden under Navigation Bar
+    if ([self.delegate respondsToSelector:@selector(webView:didFinishNavigation:)]) {
+        [self.delegate webView:webView didFinishNavigation:navigation];
+    }
+}
+
+- (void)webView:(WKWebView *)webView didReceiveServerRedirectForProvisionalNavigation:(WKNavigation *)navigation
+{
+    if ([self.delegate respondsToSelector:@selector(webView:didReceiveServerRedirectForProvisionalNavigation:)]) {
+        [self.delegate webView:webView didReceiveServerRedirectForProvisionalNavigation:navigation];
+    }
 }
 
 @end

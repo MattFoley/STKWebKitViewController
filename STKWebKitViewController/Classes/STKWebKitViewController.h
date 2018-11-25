@@ -17,6 +17,12 @@ typedef enum {
     OpenNewTabInternal
 } NewTabOpenMode;
 
+@protocol STKWebKitDelegate <NSObject>
+
+- (void)didDismissWebKitController;
+
+@end
+
 @interface STKWebKitViewController : UIViewController <WKNavigationDelegate>
 
 + (NSBundle *)bundle;
@@ -47,4 +53,6 @@ typedef enum {
 
 /*** use this to specify schemes that should be handled directly by the app ***/
 @property (strong, nonatomic) NSArray *customSchemes;
+@property (weak, nonatomic) id<WKNavigationDelegate, STKWebKitDelegate> delegate;
+
 @end
